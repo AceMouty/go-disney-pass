@@ -3,6 +3,7 @@
 Docker (windows only for running sqlc)
 
 [Sqlc](https://sqlc.dev/)
+
 Install sqlc
 
 ```sh
@@ -10,6 +11,8 @@ go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
 ```
 
 [Goose](https://github.com/pressly/goose)
+
+Install Goose
 
 ```sh
 go install github.com/pressly/goose/v3/cmd/goose@latest
