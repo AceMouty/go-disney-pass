@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=kguerr
+      #- POSTGRES_PASSWORD=door123!
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=pgsql_disney_pass
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - ./init.sql:/docker-entrypoint-initdb.d/init.sql
