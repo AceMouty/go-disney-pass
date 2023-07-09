@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type requestBody struct {
+type publicUser struct {
 	Username string
 	Password string
 }
@@ -20,7 +20,7 @@ type requestBody struct {
 func (cfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 
 	decoder := json.NewDecoder(r.Body)
-	req := requestBody{}
+	req := publicUser{}
 
 	err := decoder.Decode(&req)
 	if err != nil {
@@ -67,7 +67,7 @@ func (cfg *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request) {
 
 func (cfg *apiConfig) handleLoginUser(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	req := requestBody{}
+	req := publicUser{}
 
 	err := decoder.Decode(&req)
 	if err != nil {

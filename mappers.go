@@ -21,3 +21,13 @@ func databaseUserToUser(user database.User) User {
 		CreatedAt: user.CreatedAt,
 	}
 }
+
+type ParentPost struct {
+	PostId int32 `json:"id"`
+}
+
+func databasePostToPost(post database.ParentPost) ParentPost {
+	return ParentPost{
+		PostId: post.ID,
+	}
+}

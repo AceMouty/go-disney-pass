@@ -41,6 +41,30 @@ using a `cmd` shell
 docker run --rm -v "%cd%:/src" -w /src kjconroy/sqlc generate
 ```
 
-## Helpful links for goose
+## Applying Changes with Goose
+
+Create migrations
+
+```sh
+goose -dir ./sql/schema create migration_name sql
+```
+
+Create seed
+
+```sh
+goose -dir ./sql/seeds create seed_name sql
+```
+
+Run migrations
+
+```sh
+goose -dir ./sql/schema {up|down}
+```
+
+Run Seeds
+
+```sh
+goose -dir ./schema/seed -no-versioning up
+```
 
 [Using Goose CLI](https://citizix.com/managing-database-migrations-with-golang-goose-using-incremental-sql-changes/)

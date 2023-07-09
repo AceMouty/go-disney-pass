@@ -44,6 +44,7 @@ func main() {
 	// TODO: refactor into something cleaner...
 	appRouter.Post("/api/user/register", apiCfg.handleCreateUser)
 	appRouter.Post("/api/user/login", apiCfg.handleLoginUser)
+	appRouter.Post("/api/parent-posts", apiCfg.handleCreateParentPost)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
