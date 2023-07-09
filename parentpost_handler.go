@@ -47,6 +47,15 @@ func (cfg *apiConfig) handleGetParkInformation(w http.ResponseWriter, r *http.Re
 	return
 }
 
+func (cfg *apiConfig) handleGetAllPosts(w http.ResponseWriter, r *http.Request) {
+	dbPosts, err := cfg.DB.GetAllParentPosts(r.Context())
+	if err != nil {
+		log.Println(err)
+		respondWithError(w, http.StatusInternalServerError, "handleGetAllPosts::err unable to get posts")
+		return
+	}
+}
+
 func (cfg *apiConfig) handleCreateParentPost(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	req := newParentPost{}

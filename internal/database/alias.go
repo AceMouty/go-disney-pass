@@ -1,0 +1,3 @@
+package database
+
+type ParentPostFriendly GetAllParentPostsRow

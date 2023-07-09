@@ -64,6 +64,66 @@ func (q *Queries) CreateParentPost(ctx context.Context, arg CreateParentPostPara
 	return i, err
 }
 
+const getAllParentPosts = `-- name: GetAllParentPosts :many
+SELECT 
+pp.id
+,u1.username as username
+,u2.username as parentname
+,pa.name as park_area_name
+,ar.ride_name
+,pp.is_open
+,pp.ride_time
+,pp.number_of_kids
+FROM parent_posts as pp
+JOIN users as u1 ON u1.user_id = pp.user_id
+JOIN users as u2 ON u2.parent_id = pp.parent_id
+JOIN park_areas as pa ON pa.id = pp.area_id
+JOIN area_rides as ar ON ar.id = pp.ride_id
+`
+
+type GetAllParentPostsRow struct {
+	ID           int32
+	Username     string
+	Parentname   string
+	ParkAreaName string
+	RideName     string
+	IsOpen       bool
+	RideTime     time.Time
+	NumberOfKids int32
+}
+
+func (q *Queries) GetAllParentPosts(ctx context.Context) ([]GetAllParentPostsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAllParentPosts)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllParentPostsRow
+	for rows.Next() {
+		var i GetAllParentPostsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.Username,
+			&i.Parentname,
+			&i.ParkAreaName,
+			&i.RideName,
+			&i.IsOpen,
+			&i.RideTime,
+			&i.NumberOfKids,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getParentPostById = `-- name: GetParentPostById :one
 SELECT 
 pp.id

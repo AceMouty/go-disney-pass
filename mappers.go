@@ -6,6 +6,7 @@ import (
 
 	"github.com/acemouty/disney-pass/internal/database"
 	"github.com/google/uuid"
+	"github.com/relvacode/iso8601"
 )
 
 type User struct {
@@ -23,13 +24,37 @@ func databaseUserToUser(user database.User) User {
 }
 
 type ParentPost struct {
-	PostId int32 `json:"id"`
+	PostId       int32        `json:"id"`
+	UserName     string       `json:"userName"`
+	ParentName   string       `json:"parentName"`
+	AreaName     string       `json:"areaName"`
+	RideName     string       `json:"rideName"`
+	IsOpen       bool         `json:"isOpen"`
+	RideTime     iso8601.Time `json:"rideTime"`
+	NumberOfKids int32        `json:"numberOfKids"`
 }
 
-func databasePostToPost(post database.ParentPost) ParentPost {
+func databasePostToFriendlyPost(post database.GetAllParentPostsRow) database.ParentPostFriendly {
+
+}
+func databaseFriendlyPostToFriendlyPost(post database.ParentPostFriendly) ParentPost {
 	return ParentPost{
-		PostId: post.ID,
+		PostId:       post.ID,
+		UserName:     post.Username,
+		ParentName:   post.Parentname,
+		AreaName:     post.ParkAreaName,
+		RideName:     post.RideName,
+		NumberOfKids: post.NumberOfKids,
 	}
+}
+
+func databaseParentPostSliceToParentPostSlice(slice *[]database.ParentPostFriendly) []ParentPost {
+	parkAreas := make([]ParentPost, len(*slice))
+	for idx, parkArea := range *slice {
+		parkAreas[idx] = databaseFriendlyPostToFriendlyPost(parkArea)
+	}
+
+	return parkAreas
 }
 
 // TODO: Figure out how to make this generic...
