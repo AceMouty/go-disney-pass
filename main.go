@@ -39,20 +39,21 @@ func main() {
 
 	appRouter := chi.NewRouter()
 	appRouter.Use(cors.AllowAll().Handler)
+	// Sanity Checks...
+	appRouter.Get("/readyness", handlerReadiness)
+	appRouter.Get("/err", handlerErr)
 
-	// Route registration
+	// App Route registration
 	// TODO: refactor into something cleaner...
 	appRouter.Post("/api/user/register", apiCfg.handleCreateUser)
 	appRouter.Post("/api/user/login", apiCfg.handleLoginUser)
 	appRouter.Post("/api/parent-posts", apiCfg.handleCreateParentPost)
+	appRouter.Get("/api/tester", apiCfg.handleGetParkInformation)
 
 	srv := &http.Server{
 		Addr:    ":" + port,
 		Handler: appRouter,
 	}
-
-	appRouter.Get("/readyness", handlerReadiness)
-	appRouter.Get("/err", handlerErr)
 
 	log.Printf("Servering on port: %s\n", port)
 	log.Fatal(srv.ListenAndServe())

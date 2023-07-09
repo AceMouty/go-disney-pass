@@ -20,6 +20,33 @@ type newParentPost struct {
 	NumberOfKids int32     `json:"numberOfKids"`
 }
 
+func (cfg *apiConfig) handleGetParkInformation(w http.ResponseWriter, r *http.Request) {
+	dbParkAreas, err := cfg.DB.GetAllParkAreas(r.Context())
+	if err != nil {
+		log.Println(err)
+		respondWithError(w, http.StatusInternalServerError, "handleGetParkInformation::err unable to get park areas")
+		return
+	}
+
+	dbAreaRides, err := cfg.DB.GetAllAreaRides(r.Context())
+	if err != nil {
+		log.Println(err)
+		respondWithError(w, http.StatusInternalServerError, "handleGetParkInformation::err unable to get area rides")
+		return
+	}
+
+	parkAreas := databaseParkAreaSliceToParkAreaSlice(&dbParkAreas)
+	areaRides := databaseAreaRideSliceToAreaRideSlice(&dbAreaRides)
+
+	res := map[string]interface{}{
+		"parkAreas": parkAreas,
+		"parkRides": areaRides,
+	}
+
+	respondWithJSON(w, http.StatusOK, res)
+	return
+}
+
 func (cfg *apiConfig) handleCreateParentPost(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	req := newParentPost{}
